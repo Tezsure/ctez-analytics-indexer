@@ -21,7 +21,6 @@ async def history_volume_monthly(start_date, ago_timestamp):
            avg_volume = Decimal(avg_volume/len(volume_data));
 
     except(TypeError, AttributeError):
-        print("Errory Babe")
         avg_volume = Decimal(0);
     
     return avg_volume;     

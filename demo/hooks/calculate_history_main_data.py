@@ -15,9 +15,7 @@ async def calculate_history_main_data(
     start_date_monthly = datetime(2022, 2, 1);
     iteration = timedelta(hours=24);
     end_date = datetime.utcnow();
-    iteration_week = timedelta(days=7);
     iteration_month = relativedelta(months=+1)
-    # ctx.logger.info("Hey %s", start_date + iteration);
     while start_date<=end_date:
         data = await history_main_data(start_date);
 

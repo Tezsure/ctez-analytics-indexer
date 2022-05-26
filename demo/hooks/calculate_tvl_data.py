@@ -17,9 +17,7 @@ async def calculate_tvl_data(
     ctx: HookContext,
     major: bool,
 ) -> None:
-    # tvl_data = await tvl_stats();
-    # tez_dollar = await models.Token_USD\
-    #             .all()      
+
     tez_dollar = await history_dollar_stats();
     tvl_data = await tvl_history();
     data = await pool_history();
@@ -28,18 +26,16 @@ async def calculate_tvl_data(
     
     if not tez_dollar:
         return;
-    # ctx.logger.info("Hey babe %s", tez_dollar[1].price);
-    # data = await ctx.get_tzkt_datasource('tzkt_mainnet').get_contract_storage('KT1H5b7LxEExkFd2Tng77TfuWbM5aPvHstPr');
-    # ctx.logger.info("Hey %s", tvl_data);
+
     amount = float((Decimal(tvl_data) + 2*Decimal(data)/(10 ** 6))*Decimal(tez_dollar))
-    # amount = str(amount);
-    # ctx.logger.info("HEy man %s", str(amount));
+
     tvl_store = await models.Tvl_data.create(
         tvl = round(amount, 5),
         timestamp = start
     )
 
     # Month
+    
     tvl_values_month = await models.Tvl_data_Monthly\
                        .all()\
                        .order_by("-timestamp_from")\

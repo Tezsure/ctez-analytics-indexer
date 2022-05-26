@@ -19,14 +19,11 @@ async def calculate_history_tvl_data(
     major: bool,
 ) -> None:
     start_date = datetime(2022, 2, 1);
-    start_date_weekly = datetime(2022, 2, 1);
     start_date_monthly = datetime(2022, 2, 1);
     iteration = timedelta(hours=24);
     iteration_month = relativedelta(months=+1)
     end_date = datetime.utcnow();
 
-    # ctx.logger.info("Hey %s", start_date + iteration_month);
-    # ctx.logger.info("Hey %s", start_date + iteration);
     while start_date<=end_date:
         data = await history_tvl(start_date);
         data1 = await history_pool(start_date);

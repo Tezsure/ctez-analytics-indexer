@@ -25,7 +25,6 @@ async def history_price_weekly_monthly(start_date, ago_timestamp):
            avg_tez_price = Decimal(avg_tez_price/len(price_data));
 
     except(TypeError, AttributeError):
-        print("Errory")
         avg_ctez_price = Decimal(0);
         avg_tez_price = Decimal(0);
     

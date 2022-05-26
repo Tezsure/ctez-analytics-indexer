@@ -21,7 +21,6 @@ async def history_tvl_weekly(start_date, ago_timestamp):
            avg_tvl = Decimal(avg_tvl/len(tvl_data));
 
     except(TypeError, AttributeError):
-        print("Errory")
         avg_tvl = Decimal(0);
     
     return avg_tvl;     

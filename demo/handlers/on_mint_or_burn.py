@@ -12,7 +12,6 @@ async def on_mint_or_burn(
     mint_or_burn_0: Transaction[MintOrBurnParameter, CtezAdminStorage],
     mint_or_burn_1: Transaction[MintOrBurnParameter, CtezMainStorage],
 ) -> None:
-    # ctx.logger.info("Hey babe %s", mint_or_burn_0.storage);
     mint = 0;
     burn = 0;
     quantity = float(mint_or_burn_0.parameter.quantity)/(10 ** 6);

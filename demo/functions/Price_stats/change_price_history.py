@@ -5,7 +5,6 @@ import demo.models as models
 from datetime import datetime, timedelta
 
 async def price_change_stats_history(price_token, start_date,  amount_of_days):
-    # current_timestamp = datetime.utcnow();
     days_ago_time = start_date - timedelta(days=amount_of_days);
     try:
         ctez_trade = await models.Trade\
@@ -16,7 +15,6 @@ async def price_change_stats_history(price_token, start_date,  amount_of_days):
         ctez_price_days_ago = float(ctez_trade.price);
         
         price_change = float(((price_token - ctez_price_days_ago)/ctez_price_days_ago)*100);
-        # print("Hey", price_change);
         
     except(TypeError, AttributeError):
         price_change = float(0);

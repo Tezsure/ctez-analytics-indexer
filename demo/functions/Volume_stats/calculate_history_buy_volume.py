@@ -26,7 +26,6 @@ async def buy_volume_of_24hours_history(start_date):
         
         volume_token = float(volume*token_price);
     except(TypeError, AttributeError):
-        print("Errory")
         volume_token = float(0);
     
     return volume_token;    

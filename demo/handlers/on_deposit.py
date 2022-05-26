@@ -8,9 +8,6 @@ async def on_deposit(
     ctx: HandlerContext,
     register_deposit: Transaction[RegisterDepositParameter, CtezAdminStorage],
 ) -> None:
-    # ctx.logger.info("Hey Man and Babe %s", register_deposit);
-     
-    #  target = ;
     
     deposit = await models.Deposit_Withdraw_Data.create(
         address = register_deposit.parameter.handle.owner,

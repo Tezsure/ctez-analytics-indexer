@@ -4,7 +4,6 @@ import demo.models as models
 from datetime import timedelta, datetime
 
 async def sell_volume_of_24hours_history(start_date):
-    # timestamp_now = datetime.utcnow();
     timestamp_yesteraday = start_date - timedelta(hours=24)
     
     

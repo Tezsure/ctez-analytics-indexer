@@ -9,7 +9,6 @@ async def tvl_stats():
         tvl_stat = Decimal(0);
         for i in range(len(oven_stat)):
             tvl_stat += Decimal(oven_stat[i].tez_standing);
-        # print("Hey", tvl_stat);
 
     except(TypeError, AttributeError):
         tvl_stat = Decimal(0);

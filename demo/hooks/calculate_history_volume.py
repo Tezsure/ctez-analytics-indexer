@@ -62,7 +62,6 @@ async def calculate_history_volume(
     while start_date_monthly<=end_date:
         month_ago_time = start_date_monthly - iteration_month;
         volume_data = await history_volume_monthly(start_date_monthly, month_ago_time);
-        # print(tvl_data);
         tvl_store = await models.volumestats_monthly.create(
             token_symbol = 'ctez',
             volume = round(volume_data, 5),

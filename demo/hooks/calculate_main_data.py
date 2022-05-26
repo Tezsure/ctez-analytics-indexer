@@ -13,14 +13,7 @@ async def calculate_main_data(
     ctx: HookContext,
     major: bool,
 ) -> None:
-    # data = await ctx.get_tzkt_datasource('tzkt_mainnet').get_contract_storage('KT1H5b7LxEExkFd2Tng77TfuWbM5aPvHstPr');
-    # data1 = await ctx.get_tzkt_datasource('tzkt_mainnet').get_contract_storage('KT1GWnsoFZVHGh7roXEER3qeCcgJgrXT3de2');
-    # # ctx.logger.info("Hey %s", data);
-    # # ctx.logger.info("Hey %s", data1);
     start_time = datetime.utcnow();
-    # target = float(data1['target'])/(2 ** 48);
-    # price = float(data['cashPool'])/float(data['tokenPool']);
-    # premium_val = float(float(price)/float(target)) - float(1.0);
     data = await main_history_data();
     
     mainpage =  await models.MainDataRegularize.create(
@@ -32,6 +25,7 @@ async def calculate_main_data(
     )
 
     # Month
+    
     tvl_values_month = await models.MainDataRegularize_monthly\
                        .all()\
                        .order_by("-timestamp_from")\
@@ -43,7 +37,6 @@ async def calculate_main_data(
     start_time = pytz.utc.localize(start_time);
     if start_time - total_month <=timedelta(hours=0):
         main_data = await history_main_data_weekly_monthly(start_time, start_date_monthly);
-        print("Hey babe", tvl_values_month.id);
         main_table = await models.MainDataRegularize_monthly.update_or_create(
             id = tvl_values_month.id,
             defaults={

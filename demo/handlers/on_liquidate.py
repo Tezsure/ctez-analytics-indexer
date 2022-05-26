@@ -13,7 +13,6 @@ async def on_liquidate(
     liquidate: Transaction[LiquidateParameter, CtezAdminStorage],
     mint_or_burn: Transaction[MintOrBurnParameter, CtezMainStorage],
 ) -> None:
-    # ctx.logger.info("Hey %s", liquidate.storage.ovens[0].value);
     
     oven = await models.ovendata.update_or_create(
         oven_address = liquidate.storage.ovens[0].value.address,
@@ -21,16 +20,6 @@ async def on_liquidate(
             'liquidation' : True
         }
     )
-
-    # liquidated = await models.Ovens_liquidated.get_or_create(
-    #     id = 1,
-    #     defaults={
-    #         "number_of_ovens_liquidated":-1,
-    #     }
-    # );
-
-
-    # ctx.logger.info("Hey %s", liquidated[0].number_of_ovens_liquidated);
 
     ovens_liquidated = await models.Ovens_liquidated.update_or_create(
         liquidated_oven = liquidate.storage.ovens[0].value.address,

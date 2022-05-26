@@ -47,6 +47,7 @@ async def calculate_volume_stats(
 
 
     # Month
+
     volume_values_month = await models.Tvl_data_Monthly\
                        .all()\
                        .order_by("-timestamp_from")\
@@ -58,7 +59,6 @@ async def calculate_volume_stats(
     timestamp_now = pytz.utc.localize(timestamp_now);
     if timestamp_now - total_month <=timedelta(hours=0):
         volume_data = await history_volume_monthly(timestamp_now, start_date_monthly);
-        # print("Hey babe", volume_values_month.id);
         tvl_table = await models.volumestats_monthly.update_or_create(
             id = volume_values_month.id,
             defaults={

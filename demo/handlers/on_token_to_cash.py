@@ -18,10 +18,8 @@ async def on_token_to_cash(
     transfer: Transaction[TransferParameter, CtezMainStorage],
     transaction_3: OperationData,
 ) -> None:
-    # ctx.logger.info("hey %s", transaction_3);
     tez = float(transaction_3.amount)/(10 ** 6);
     token = float(token_to_cash.parameter.tokensSold)/(10 ** 6);
-    # price_token = NULL;
     if tez == 0:
         return;
     price_tez = float(tez/token);
