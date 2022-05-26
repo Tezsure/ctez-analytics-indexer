@@ -1,0 +1,233 @@
+spec_version: 1.2
+package: demo
+
+database:
+  kind: postgres
+  host: db
+  port: 5432
+  user: postgres
+  password: Karan11000
+  database: ctez
+  schema_name: public
+# database:
+#    kind: sqlite
+#    path: demo.sqlite3
+hasura:
+  url: http://hasura:8080
+  admin_secret: changeme
+  camel_case: true
+  select_limit: 1000
+  
+contracts:
+  ctez_swap_mainnet:
+    address: KT1H5b7LxEExkFd2Tng77TfuWbM5aPvHstPr
+    typename: ctez_swap
+  ctez_admin_mainnet:
+    address: KT1GWnsoFZVHGh7roXEER3qeCcgJgrXT3de2
+    typename: ctez_admin
+  ctez_mainnet:
+    address: KT1SjXiUX63QvdNMcM2m492f7kuf8JxXRLp4
+    typename: ctez_main
+  ctez_lp_mainnet:
+    address: KT1MX69KiYtZKNFeKfELyXJrWFhsQGgcuNgh
+    typename: ctez_lp
+  oracle_mainnet:
+    address: KT1AdbYiPYb5hDuEuVrfxmFehtnBCXv4Np7r 
+    typename: oracle_main
+  
+     
+
+datasources:
+  tzkt_mainnet:
+    kind: tzkt
+    url: ${TZKT_URL:-https://api.tzkt.io}
+    buffer_size: 2  # <---
+    
+indexes:
+  tzbtc_holders_mainnet:
+    kind: operation
+    datasource: tzkt_mainnet
+    contracts: 
+      - ctez_swap_mainnet
+      - ctez_admin_mainnet
+      - oracle_mainnet
+    handlers:
+      - callback: on_cash_to_token
+        pattern:
+          - type: transaction
+            destination: ctez_swap_mainnet
+            entrypoint: cashToToken
+          - type: transaction
+            destination: ctez_admin_mainnet
+            entrypoint: cfmm_price
+          - type: transaction
+            destination: ctez_mainnet
+            entrypoint: transfer
+      - callback: on_token_to_cash
+        pattern:
+          - type: transaction
+            destination: ctez_swap_mainnet
+            entrypoint: tokenToCash
+          - type: transaction
+            destination: ctez_admin_mainnet
+            entrypoint: cfmm_price
+          - type: transaction
+            destination: ctez_mainnet
+            entrypoint: transfer
+          - type: transaction
+            source: ctez_swap_mainnet
+      - callback: add_liquidity
+        pattern:
+          - type: transaction
+            destination: ctez_swap_mainnet
+            entrypoint: addLiquidity
+          - type: transaction
+            destination: ctez_mainnet
+            entrypoint: transfer
+          - type: transaction
+            destination: ctez_lp_mainnet
+            entrypoint: mintOrBurn
+      - callback: remove_liquidity
+        pattern:
+          - type: transaction
+            destination: ctez_swap_mainnet
+            entrypoint: removeLiquidity
+          - type: transaction
+            destination: ctez_lp_mainnet
+            entrypoint: mintOrBurn
+          - type: transaction
+            destination: ctez_mainnet
+            entrypoint: transfer
+          - type: transaction
+            source: ctez_swap_mainnet
+      - callback: on_liquidate
+        pattern:
+          - type: transaction
+            destination: ctez_admin_mainnet
+            entrypoint: liquidate
+          - type: transaction
+            destination: ctez_mainnet
+            entrypoint: mintOrBurn
+      - callback: on_mint_or_burn
+        pattern:
+          - type: transaction
+            destination: ctez_admin_mainnet
+            entrypoint: mint_or_burn
+          - type: transaction
+            destination: ctez_mainnet
+            entrypoint: mintOrBurn  
+      - callback: on_deposit
+        pattern:
+          - type: transaction
+            destination: ctez_admin_mainnet
+            entrypoint: register_deposit
+      - callback: on_withdraw
+        pattern:
+          - type: transaction
+            destination: ctez_admin_mainnet
+            entrypoint: withdraw
+ 
+  ovens_bigmap:
+    kind: big_map
+    datasource: tzkt_mainnet
+    handlers:
+      - callback: on_oven_update
+        contract: ctez_admin_mainnet
+        path: ovens
+
+  assetMap_bigmap:
+    kind: big_map
+    datasource: tzkt_mainnet
+    handlers:
+      - callback: on_asset_update
+        contract: oracle_mainnet
+        path: assetMap
+        
+
+hooks:
+    calculate_history_price:
+        callback: calculate_history_price
+        atomic: false
+        args:
+          major: bool
+    calculate_history_volume:
+        callback: calculate_history_volume
+        atomic: false
+        args:
+          major: bool
+    calculate_history_tvl_data:
+        callback: calculate_history_tvl_data
+        atomic: false
+        args:
+          major: bool
+    calculate_history_main_data:
+        callback: calculate_history_main_data
+        atomic: false
+        args:
+          major: bool
+    calculate_price_stats:
+        callback: calculate_price_stats
+        atomic: false
+        args:
+          major: bool
+    calculate_volume_stats:
+        callback: calculate_volume_stats
+        atomic: false
+        args:
+          major: bool
+    calculate_main_data:
+        callback: calculate_main_data
+        atomic: false
+        args:
+          major: bool
+    calculate_tvl_data:
+        callback: calculate_tvl_data
+        atomic: false
+        args:
+          major: bool
+
+jobs:
+      # price_history:
+      #   hook: calculate_history_price
+      #   interval: 120
+      #   args:
+      #     major: false
+      # volume_history:
+      #   hook: calculate_history_volume
+      #   interval: 120
+      #   args:
+      #     major: false    
+    # history_main_stats:
+    #     hook: calculate_history_main_data
+    #     interval: 120
+    #     args:
+    #       major: false
+    #  history_tvl_stats:
+    #     hook: calculate_history_tvl_data
+    #     interval: 120
+    #     args:
+    #       major: false
+    price_stats:
+        hook: calculate_price_stats
+        interval: 86400 
+        args:
+          major: false
+    volume_stats:
+        hook: calculate_volume_stats
+        interval: 86400 
+        args:
+          major: false
+    main_stats:
+        hook: calculate_main_data
+        interval: 86400 
+        args:
+          major: false
+    tvl_stats:
+        hook: calculate_tvl_data
+        interval: 86400 
+        args:
+          major: false
+           
+   
+           
+          

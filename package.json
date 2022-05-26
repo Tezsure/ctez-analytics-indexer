@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@genql/runtime": "^2.9.0",
+    "@vue/cli": "^5.0.4",
+    "@vue/composition-api": "^1.4.9",
+    "global": "^4.4.0"
+  }
+}
