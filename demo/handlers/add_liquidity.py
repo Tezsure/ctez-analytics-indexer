@@ -16,15 +16,12 @@ async def add_liquidity(
     transfer: Transaction[TransferParameter, CtezMainStorage],
     mint_or_burn: Transaction[MintOrBurnParameter, CtezLpStorage],
 ) -> None:
-    # ctx.logger.info("hey %s", add_liquidity);
     tez_qty = float(add_liquidity.data.amount)/(10 ** 6);
     token_qty = float(transfer.parameter.value)/(10 ** 6);
     tez_pool = float(add_liquidity.storage.cashPool)/(10 ** 6);
     token_pool = float(add_liquidity.storage.tokenPool)/(10 ** 6);
     price_qty = float(tez_pool/token_pool);
     mint_qty = Decimal(float(mint_or_burn.parameter.quantity)/(10 ** 6));
-    # ctx.logger.info("Hey %s", mint_qty);
-    # ctx.logger.info("Hey %s", add_liquidity.parameter.owner);
     
     position = models.Position(
         token_symbol = 'ctez',

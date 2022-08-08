@@ -9,12 +9,9 @@ async def history_pool_ctez(start_date):
             .filter(timestamp__gte=start_date)\
             .order_by("timestamp")\
             .first()
-        # print(pool_data.quantity_pool1);
         pool_stats = Decimal(pool_data.quantity_pool2);
-        # print("Hey", tvl_stat);
 
     except(TypeError, AttributeError):
-        print("Errory Women")
         pool_stats = Decimal(0);
     
     return pool_stats;     

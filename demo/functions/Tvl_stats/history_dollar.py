@@ -12,7 +12,6 @@ async def history_dollar_stats():
         dollar = Decimal(Usd_stats.price);
 
     except(TypeError, AttributeError):
-        print("Errory Dollar1")
         dollar = Decimal(0);
     
     return dollar;     

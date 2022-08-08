@@ -24,7 +24,6 @@ async def calculate_history_price(
     iteration = timedelta(hours=24);
     iteration_week = timedelta(days=7);
     iteration_month = relativedelta(months=+1)
-    # ctx.logger.info("Hey %s", iteration);
     
     while start_date <= end_date:
         ctez_price_stats = await history_price(start_date)
@@ -66,7 +65,6 @@ async def calculate_history_price(
     while start_date_monthly<=end_date:
         month_ago_time = start_date_monthly - iteration_month;
         price_data = await history_price_weekly_monthly(start_date_monthly, month_ago_time);
-        # print(tvl_data);
         price_store = await models.pricestats_monthly.create(
             token_symbol = 'ctez',
             ctez_price = round(price_data['current_avg_ctez_price'], 6),
@@ -89,6 +87,5 @@ async def calculate_history_price(
             epoch_timestamp_to = int(end_date.timestamp()*1000)
         ) 
 
-    ctx.logger.info("Hey Man, How are you")
     if(start_date>=end_date):
         return;

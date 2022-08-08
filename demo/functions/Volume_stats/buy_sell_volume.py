@@ -8,7 +8,6 @@ async def buy_sell_volume_percentage(buy_sell_volume, token_volume):
         
         buy_sell_volume = float(float(float(buy_sell_volume)/float(token_volume))*100);
     except(TypeError, AttributeError, ZeroDivisionError, ValueError):
-        print("Errory")
         buy_sell_volume = float(0);
     
     return buy_sell_volume;

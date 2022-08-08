@@ -8,7 +8,6 @@ async def history_price(start_date):
             .filter(timestamp__gte=start_date)\
             .order_by("timestamp")\
             .first()
-        # print(ctez_trade);
         history_ctez_price = float(ctez_trade.price);
     except(TypeError, AttributeError):
         history_ctez_price = float(0);

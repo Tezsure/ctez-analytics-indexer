@@ -33,7 +33,6 @@ async def history_main_data_weekly_monthly(start_date, ago_timestamp):
             avg_annual_drift = Decimal(avg_annual_drift/len(main_data));
 
     except(TypeError, AttributeError):
-        print("Errory")
         avg_price = Decimal(0);
         avg_target = Decimal(0);
         avg_premium = Decimal(0);

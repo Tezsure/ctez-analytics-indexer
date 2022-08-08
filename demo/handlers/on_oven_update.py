@@ -12,12 +12,9 @@ async def on_oven_update(
     ovens: BigMapDiff[OvensKey, OvensValue],
 ) -> None:
     
-    # ctx.logger.info("Hey %s", ovens.data.timestamp.timestamp());
     if not ovens.value:
-        # ctx.logger.info("Hey babe")
         return;
 
-    # ctx.logger.info("Hey %s", data['total_supply'])
     
     tez = round(float(float(ovens.value.tez_balance)/(10 ** 6)), 6);
     ctez = round(float(float(ovens.value.ctez_outstanding)/(10 ** 6)), 6)

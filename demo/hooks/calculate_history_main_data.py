@@ -15,9 +15,7 @@ async def calculate_history_main_data(
     start_date_monthly = datetime(2021, 10, 1);
     iteration = timedelta(hours=24);
     end_date = datetime.utcnow();
-    iteration_week = timedelta(days=7);
     iteration_month = relativedelta(months=+1)
-    # ctx.logger.info("Hey %s", start_date + iteration);
     while start_date<=end_date:
         data = await history_main_data(start_date);
 
@@ -39,7 +37,6 @@ async def calculate_history_main_data(
     while start_date_monthly<=end_date:
         month_ago_time = start_date_monthly - iteration_month;
         main_data = await history_main_data_weekly_monthly(start_date_monthly, month_ago_time);
-        # print(tvl_data);
         main_stats = await models.MainDataRegularize_monthly.create(
             current_price = round(main_data['current_avg_price'], 6),
             current_target = round(main_data['current_avg_target'], 6),
@@ -67,6 +64,5 @@ async def calculate_history_main_data(
         )
         
     
-    ctx.logger.info("Hey Man, How are you")
         
     

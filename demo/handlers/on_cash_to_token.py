@@ -16,10 +16,7 @@ async def on_cash_to_token(
     cfmm_price: Transaction[CfmmPriceParameter, CtezAdminStorage],
     transfer: Transaction[TransferParameter, CtezMainStorage],
 ) -> None:
-    # ctx.logger.info("Hey %s", cash_to_token)
-    # ctx.logger.info("Hey %s", models.TradeSide.BUY);
     tez = float(cash_to_token.data.amount)/(10 ** 6);
-    # ctx.logger.info("Hey %s", tez);
     token = float(transfer.parameter.value)/(10 ** 6);
     price_tez = 0;
     tez_pool = float(cash_to_token.storage.cashPool)/(10 ** 6);
@@ -52,8 +49,7 @@ async def on_cash_to_token(
         epoch_timestamp = int(cash_to_token.data.timestamp.timestamp()*1000)
     );
     await pools.save();
-
-    # ctx.logger.info("Hey %s", cfmm_price);
+    
     target = float(float(cfmm_price.storage.target)/(2 ** 48));
     price = float(float(cash_to_token.storage.cashPool)/float(cash_to_token.storage.tokenPool));
     premium_val = (float(price/target) - float(1.0));

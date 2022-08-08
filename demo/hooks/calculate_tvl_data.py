@@ -20,9 +20,6 @@ async def calculate_tvl_data(
     ctx: HookContext,
     major: bool,
 ) -> None:
-    # tvl_data = await tvl_stats();
-    # tez_dollar = await models.Token_USD\
-    #             .all()      
     tez_dollar = await history_dollar_stats();
     tvl_data = await tvl_history();
     data = await pool_history();
@@ -33,12 +30,8 @@ async def calculate_tvl_data(
     
     if not tez_dollar:
         return;
-    # ctx.logger.info("Hey %s", tvl_data);
-    # amount = float((Decimal(tvl_data) + 2*Decimal(data)/(10 ** 6))*Decimal(tez_dollar))
     oven_tvl_data = float(tvl_data * tez_dollar)
     amm_tvl_data = float(float(ctez_data)*float(main_data.current_price) + float(data))*float(tez_dollar)
-    # amount = str(amount);
-    # ctx.logger.info("HEy man %s", str(amount));
     tvl_store = await models.Tvl_data.create(
         oven_tvl = round(oven_tvl_data, 6),
         amm_tvl = round(amm_tvl_data, 6),
@@ -57,7 +50,6 @@ async def calculate_tvl_data(
     total_month = start_date_monthly + iteration_month
     if start - total_month <=timedelta(hours=0):
         tvl_data = await history_tvl_weekly(start, start_date_monthly);
-        print("Hey babe", tvl_values_month.id);
         tvl_table = await models.Tvl_data_Monthly.update_or_create(
             id = tvl_values_month.id,
             defaults={

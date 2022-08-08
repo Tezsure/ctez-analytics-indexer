@@ -27,8 +27,6 @@ async def calculate_history_tvl_data(
     iteration_month = relativedelta(months=+1)
     end_date = datetime.utcnow();
 
-    # ctx.logger.info("Hey %s", start_date + iteration_month);
-    # ctx.logger.info("Hey %s", start_date + iteration);
     while start_date<=end_date:
         data = await history_tvl(start_date);
         data1 = await history_pool(start_date);
@@ -50,11 +48,8 @@ async def calculate_history_tvl_data(
 
         if dollars==0:
             dollars = await history_dollar_stats();
-        # ctx.logger.info("Hey %s", data);
         amount = Decimal((Decimal(data))*Decimal(dollars));
-        # amm_amount = ;
         amm_amount = Decimal(Decimal(ctez_data*main_data.current_price + data1)*dollars);
-        # amount = str(amount);
         tvl_store = await models.Tvl_data.create(
         oven_tvl = round(amount, 6),
         amm_tvl =  round(amm_amount, 6),
@@ -68,7 +63,6 @@ async def calculate_history_tvl_data(
     while start_date_monthly<=end_date:
         month_ago_time = start_date_monthly - iteration_month;
         tvl_data = await history_tvl_weekly(start_date_monthly, month_ago_time);
-        # print(tvl_data);
         tvl_store = await models.Tvl_data_Monthly.create(
             oven_tvl = round(tvl_data['avg_tvl_data'], 6),
             amm_tvl = round(tvl_data['avg_amm_tvl_data'], 6),
@@ -90,5 +84,3 @@ async def calculate_history_tvl_data(
             epoch_timestamp_from = int(start_date_monthly.timestamp()*1000),
             epoch_timestamp_to = int(end_date.timestamp()*1000)
         ) 
-
-    ctx.logger.info("Hey Man, how are you")

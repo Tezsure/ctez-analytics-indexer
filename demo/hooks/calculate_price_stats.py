@@ -49,7 +49,6 @@ async def calculate_price_stats(
     end_date = pytz.utc.localize(end_date);
     if end_date - total_month <=timedelta(hours=0):
         price_data = await history_price_weekly_monthly(end_date, start_date_monthly);
-        # print("Hey babe", price_values_month.id);
         price_table = await models.pricestats_monthly.update_or_create(
             id = price_values_month.id,
             defaults={

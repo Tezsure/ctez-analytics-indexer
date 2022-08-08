@@ -22,9 +22,7 @@ async def on_asset_update(
         return;
     if not asset_map.key:
         return;
-    # ctx.logger.info("Hey %s", asset_map.value.computedPrice);
     if asset_map.key.__root__ == "XTZ-USD":
-        # ctx.logger.info("hey %s", asset_map.key.__root__)
         price = float(asset_map.value.computedPrice)/(10 ** 6);
         usd_data = await models.Token_USD.create(
                 price = round(price, 6),

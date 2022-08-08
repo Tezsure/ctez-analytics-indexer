@@ -12,7 +12,6 @@ async def history_main_data(start_date):
             .first()
         print("Hey Man", main_data.current_target);
     except(TypeError, AttributeError):
-        # print("Errory")
         main_data = Decimal(0);
     
     return main_data;     

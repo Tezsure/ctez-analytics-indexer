@@ -11,11 +11,8 @@ async def ctez_pool_history():
             .first()
             
         pool_stats = Decimal(pool_data.quantity_pool2);
-        print("Hey Women")
-        # print("Hey", tvl_stat);
 
     except(TypeError, AttributeError):
-        print("Errory Women1")
         pool_stats = Decimal(0);
     
     return pool_stats;     
