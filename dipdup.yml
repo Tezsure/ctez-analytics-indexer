@@ -196,10 +196,10 @@ jobs:
       #   hook: calculate_history_volume
       #   interval: 120
       #   args:
-      #     major: false    
+      #     major: false   
     # history_main_stats:
     #     hook: calculate_history_main_data
-    #     interval: 120
+    #     interval: 240
     #     args:
     #       major: false
     #  history_tvl_stats:
@@ -228,6 +228,3 @@ jobs:
         args:
           major: false
            
-   
-           
-          

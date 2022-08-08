@@ -19,17 +19,20 @@ class Trade(Model):
     id = fields.IntField(pk=True)
     token_symbol = fields.CharField(max_length=7)
     trader = fields.CharField(max_length=36)
+    operation_hash = fields.CharField(max_length=55)
     side_trade = fields.IntEnumField(enum_type=TradeSide)
     tez_qty = fields.FloatField();
     token_qty = fields.FloatField();
     price = fields.FloatField();
     level = fields.BigIntField();
     timestamp = fields.DatetimeField()
+    epoch_timestamp = fields.BigIntField()
     
 class Position(Model):
     id = fields.IntField(pk=True)
     token_symbol = fields.CharField(max_length=7)
     trader = fields.CharField(36)
+    operation_hash = fields.CharField(max_length=55)
     side_liquidity = fields.IntEnumField(enum_type=LiquiditySide)
     quantity_tk1 = fields.FloatField();
     quantity_tk2 = fields.FloatField();
@@ -40,6 +43,14 @@ class Position(Model):
     price = fields.FloatField();
     level = fields.BigIntField()
     timestamp = fields.DatetimeField()
+    epoch_timestamp = fields.BigIntField()
+
+class PoolsData(Model):
+    id = fields.IntField(pk=True)
+    quantity_pool1 = fields.FloatField();
+    quantity_pool2 = fields.FloatField();
+    timestamp = fields.DatetimeField()
+    epoch_timestamp = fields.BigIntField()
     
 class MainData(Model):
     id = fields.IntField(pk=True)
@@ -48,6 +59,7 @@ class MainData(Model):
     premium = fields.DecimalField(max_digits=40, decimal_places=7);
     current_annual_drift = fields.DecimalField(max_digits=40, decimal_places=7);
     timestamp = fields.DatetimeField()
+    epoch_timestamp = fields.BigIntField()
     
 class MainDataRegularize(Model):
     id = fields.IntField(pk=True)
@@ -56,6 +68,7 @@ class MainDataRegularize(Model):
     premium = fields.FloatField();
     current_annual_drift = fields.FloatField();
     timestamp = fields.DatetimeField()
+    epoch_timestamp = fields.BigIntField()
     
 class MainDataRegularize_monthly(Model):
     id = fields.IntField(pk=True)
@@ -65,27 +78,29 @@ class MainDataRegularize_monthly(Model):
     current_annual_drift = fields.FloatField();
     timestamp_from = fields.DatetimeField()
     timestamp_to = fields.DatetimeField()
+    epoch_timestamp_from = fields.BigIntField()
+    epoch_timestamp_to = fields.BigIntField()
 
 class pricestats(Model):
     id = fields.IntField(pk=True)
     token_symbol = fields.CharField(max_length=7)
     ctez_price = fields.FloatField();
-    tez_price = fields.FloatField();
     price_change_24hours = fields.FloatField();
     price_change_7days = fields.FloatField();
     prce_change_1month = fields.FloatField();
     price_change_1year = fields.FloatField();
     level = fields.BigIntField();
     timestamp = fields.DatetimeField()
+    epoch_timestamp = fields.BigIntField()
 
 class pricestats_monthly(Model):
     id = fields.IntField(pk=True)
     token_symbol = fields.CharField(max_length=7)
-    ctez_price = fields.FloatField();
-    tez_price = fields.FloatField();
+    ctez_price = fields.FloatField()
     timestamp_from = fields.DatetimeField()
     timestamp_to = fields.DatetimeField()
-
+    epoch_timestamp_from = fields.BigIntField()
+    epoch_timestamp_to = fields.BigIntField()
 
 class volumestats(Model):
     id = fields.IntField(pk=True)
@@ -99,6 +114,8 @@ class volumestats(Model):
     volume_1month = fields.FloatField();
     level = fields.BigIntField()
     timestamp = fields.DatetimeField()    
+    epoch_timestamp = fields.BigIntField()
+    
 
 class volumestats_monthly(Model):
     id = fields.IntField(pk=True)
@@ -106,6 +123,8 @@ class volumestats_monthly(Model):
     volume = fields.FloatField();
     timestamp_from = fields.DatetimeField()
     timestamp_to = fields.DatetimeField()   
+    epoch_timestamp_from = fields.BigIntField()
+    epoch_timestamp_to = fields.BigIntField()
     
 class ovendata(Model):
     id = fields.IntField(pk=True);
@@ -114,6 +133,7 @@ class ovendata(Model):
     tez_standing = fields.FloatField();
     liquidation = fields.BooleanField(default=False);
     timestamp = fields.DatetimeField();
+    epoch_timestamp = fields.BigIntField()
     
 class TezOven(Model):
     id = fields.IntField(pk=True);
@@ -121,40 +141,51 @@ class TezOven(Model):
     ctez_in_all_ovens = fields.BigIntField();
     collateral_supply = fields.FloatField();
     timestamp = fields.DatetimeField();
+    epoch_timestamp = fields.BigIntField()
 
 class Mint_Burn_Data(Model):
     id = fields.IntField(pk=True);
     address = fields.CharField(36);
     oven_address = fields.CharField(36);
+    operation_hash = fields.CharField(max_length=55)
     target = fields.FloatField();
     mint_amount = fields.FloatField();
     burn_amount = fields.FloatField();
     timestamp = fields.DatetimeField();
+    epoch_timestamp = fields.BigIntField()
 
 class Deposit_Withdraw_Data(Model):
     id = fields.IntField(pk=True);
     address = fields.CharField(36);
     oven_address = fields.CharField(36);
+    operation_hash = fields.CharField(max_length=55)
     side_oven = fields.IntEnumField(enum_type=OvenSide)
     target = fields.FloatField();
     amount = fields.FloatField();
     timestamp = fields.DatetimeField();
+    epoch_timestamp = fields.BigIntField()
     
 class Tvl_data(Model):
     id = fields.IntField(pk=True);
-    tvl = fields.FloatField();
+    oven_tvl = fields.FloatField();
+    amm_tvl = fields.FloatField();
     timestamp = fields.DatetimeField();
+    epoch_timestamp = fields.BigIntField()
 
 class Tvl_data_Monthly(Model):
     id = fields.IntField(pk=True);
-    tvl = fields.FloatField();
+    oven_tvl = fields.FloatField();
+    amm_tvl = fields.FloatField();
     timestamp_from = fields.DatetimeField();
     timestamp_to = fields.DatetimeField();
+    epoch_timestamp_from = fields.BigIntField()
+    epoch_timestamp_to = fields.BigIntField()
     
 class Token_USD(Model):
     id = fields.IntField(pk=True);
     price = fields.FloatField();
     timestamp = fields.DatetimeField();
+    epoch_timestamp = fields.BigIntField()
 
 class Ovens_liquidated(Model):
     id = fields.IntField(pk=True);

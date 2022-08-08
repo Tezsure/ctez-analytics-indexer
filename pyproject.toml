@@ -6,7 +6,7 @@ authors = ["Karantezsure <karan@tezsure>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-dipdup = "^5.1.0"
+dipdup = "^5.1.6"
 python-dateutil = "^2.8.2"
 
 [tool.poetry.dev-dependencies]

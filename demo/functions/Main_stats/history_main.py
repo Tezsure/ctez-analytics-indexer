@@ -10,9 +10,9 @@ async def history_main_data(start_date):
             .filter(timestamp__gte=start_date)\
             .order_by("timestamp")\
             .first()
-            
-        main_value = main_data.current_target
+        print("Hey Man", main_data.current_target);
     except(TypeError, AttributeError):
+        # print("Errory")
         main_data = Decimal(0);
     
     return main_data;     

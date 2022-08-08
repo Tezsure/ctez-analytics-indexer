@@ -8,6 +8,7 @@ async def price_stats_provider():
             .filter(token_symbol='ctez')\
             .order_by("-timestamp")\
             .first()
+        # print(ctez_trade.price);
         ctez_price = float(ctez_trade.price);
     except(TypeError, AttributeError):
         ctez_price = float(0);

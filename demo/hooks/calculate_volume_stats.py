@@ -9,6 +9,7 @@ from demo.functions.Volume_stats.ctez_volume_days import volume_days
 from demo.functions.Weekly.Volume_stats.calculate_history_volume_monthly import history_volume_monthly
 from dateutil.relativedelta import *
 import pytz
+from demo.functions.Tvl_stats.history_dollar import history_dollar_stats
 
 async def calculate_volume_stats(
     ctx: HookContext,
@@ -19,10 +20,11 @@ async def calculate_volume_stats(
     level = await get_level();
     
     # Volume Calculation for ctez for 24 hours
-    
+    dollars = await history_dollar_stats();
     buy_volume_24hours_ctez = await buy_volume_of_24hours();
     sell_volume_24hours_ctez = await sell_volume_of_24hours();
     volume_24hours_ctez = buy_volume_24hours_ctez + sell_volume_24hours_ctez;
+    volume_24hours_ctez = float(float(volume_24hours_ctez)*float(dollars));
     
     buy_volume_percentage = await buy_sell_volume_percentage(buy_volume_24hours_ctez, volume_24hours_ctez);
     sell_volume_percentage = await buy_sell_volume_percentage(sell_volume_24hours_ctez, volume_24hours_ctez);
@@ -40,15 +42,15 @@ async def calculate_volume_stats(
         volume_7days = round(volume_7days_ctez, 5),
         volume_1month = round(volume_1month_ctez, 5),
         level = level,
-        timestamp = timestamp_now
+        timestamp = timestamp_now,
+        epoch_timestamp = int(timestamp_now.timestamp()*1000)
     )
     
     await volume_stats.save();
 
 
     # Month
-
-    volume_values_month = await models.Tvl_data_Monthly\
+    volume_values_month = await models.volumestats_monthly\
                        .all()\
                        .order_by("-timestamp_from")\
                        .first();
@@ -59,22 +61,41 @@ async def calculate_volume_stats(
     timestamp_now = pytz.utc.localize(timestamp_now);
     if timestamp_now - total_month <=timedelta(hours=0):
         volume_data = await history_volume_monthly(timestamp_now, start_date_monthly);
+        # print("Hey babe", volume_values_month.id);
         tvl_table = await models.volumestats_monthly.update_or_create(
             id = volume_values_month.id,
             defaults={
                 'token_symbol': 'ctez',
-                'volume': round(volume_data, 5),
+                'volume': round(volume_data, 6),
                 'timestamp_from': start_date_monthly,
-                'timestamp_to' : timestamp_now
+                'timestamp_to' : timestamp_now,
+                'epoch_timestamp_from' : int(start_date_monthly.timestamp()*1000),
+                'epoch_timestamp_to' : int(timestamp_now.timestamp()*1000)
             }
         );
     else:
+        volume_data_prev = await history_volume_monthly(total_month, start_date_monthly);
+        tvl_table_prev = await models.volumestats_monthly.update_or_create(
+            id = volume_values_month.id,
+            defaults={
+                'token_symbol': 'ctez',
+                'volume': round(volume_data_prev, 6),
+                'timestamp_from': start_date_monthly,
+                'timestamp_to' : total_month,
+                'epoch_timestamp_from' : int(start_date_monthly.timestamp()*1000),
+                'epoch_timestamp_to' : int(total_month.timestamp()*1000)
+            }
+        );
+
+
         volume_data = await history_volume_monthly(timestamp_now, total_month);
         tvl_table = await models.volumestats_monthly.create(
             token_symbol = 'ctez',
-            volume = round(volume_data, 5),
+            volume = round(volume_data, 6),
             timestamp_from = total_month,
-            timestamp_to = timestamp_now
+            timestamp_to = timestamp_now,
+            epoch_timestamp_from = int(total_month.timestamp()*1000),
+            epoch_timestamp_to = int(timestamp_now.timestamp()*1000)
         );
 
 

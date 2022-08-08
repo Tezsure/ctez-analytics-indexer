@@ -16,6 +16,7 @@ async def price_change_stats(price_token, amount_of_days):
         ctez_price_days_ago = float(ctez_trade.price);
         
         price_change = float(((price_token - ctez_price_days_ago)/ctez_price_days_ago)*100);
+        # print("Hey", price_change);
         
     except(TypeError, AttributeError):
         price_change = float(0);
